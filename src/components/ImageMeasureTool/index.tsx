@@ -22,7 +22,37 @@ export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
       data: [],
       step: 0,
    });
+   const [factor, setFactor] = React.useState({
+      input: 1,
+      calculate: 1,
+   });
+   const [color, setColor] = React.useState("#F5236B");
 
+   React.useEffect(() => {
+      if (points.length === 2) {
+         const currentDimension = Number(
+            calculateDistance(
+               points[points.length - 2],
+               points[points.length - 1],
+               imageWidthCm
+            )
+         );
+         const promptInput = prompt(
+            "Please input real dimension 'cm'",
+            `${currentDimension}`
+         );
+         if (promptInput) {
+            const value = Number(promptInput);
+
+            if (!isNaN(value)) {
+               setFactor({
+                  input: value,
+                  calculate: value / currentDimension,
+               });
+            }
+         }
+      }
+   }, [imageWidthCm, points, points.length]);
    const handleMouseDown = (e: KonvaEventObject<MouseEvent>) => {
       const stage = e.target.getStage();
       const stagePos = stage?.getPointerPosition();
@@ -68,10 +98,17 @@ export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
    };
    return (
       <div>
-         <div>
+         <div style={{ display: "flex" }}>
             <Button onClick={handleUndo}>Undo</Button>
             <Button onClick={handleRedo}>Redo</Button>
             <Button onClick={reset}>Reset</Button>
+            <div>
+               <input
+                  value={color}
+                  onChange={(e) => setColor(e.target.value as string)}
+                  type="color"
+               />
+            </div>
          </div>
          {status === "loading" && (
             <div style={{ textAlign: "center" }}>loading...</div>
@@ -103,7 +140,7 @@ export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
                                  points[index].x,
                                  points[index].y,
                               ]}
-                              stroke="red"
+                              stroke={color}
                               strokeWidth={1}
                            />
                         )}
@@ -114,12 +151,16 @@ export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
                                  (points[index - 1].y + points[index].y) / 2 -
                                  15
                               }
-                              text={`${calculateDistance(
-                                 points[index - 1],
-                                 points[index],
-                                 imageWidthCm
-                              )} cm`}
-                              fill="red"
+                              text={`${(
+                                 Number(
+                                    calculateDistance(
+                                       points[index - 1],
+                                       points[index],
+                                       imageWidthCm
+                                    )
+                                 ) * factor.calculate
+                              ).toFixed(1)} cm`}
+                              fill={color}
                               fontSize={16}
                               align="center"
                            />
@@ -129,7 +170,7 @@ export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
                            x={point.x}
                            y={point.y}
                            radius={3}
-                           fill="red"
+                           fill={color}
                            draggable={false}
                         />
                      </React.Fragment>
