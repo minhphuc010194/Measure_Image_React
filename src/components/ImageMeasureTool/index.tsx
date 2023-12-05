@@ -68,9 +68,11 @@ export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
    };
    return (
       <div>
-         <Button onClick={handleUndo}>Undo</Button>
-         <Button onClick={handleRedo}>Redo</Button>
-         <Button onClick={reset}>Reset</Button>
+         <div>
+            <Button onClick={handleUndo}>Undo</Button>
+            <Button onClick={handleRedo}>Redo</Button>
+            <Button onClick={reset}>Reset</Button>
+         </div>
          {status === "loading" && (
             <div style={{ textAlign: "center" }}>loading...</div>
          )}
