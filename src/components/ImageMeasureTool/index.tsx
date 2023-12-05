@@ -1,8 +1,9 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import { Stage, Layer, Line, Text, Image, Circle } from "react-konva";
+import { KonvaEventObject } from "konva/lib/Node";
 import useImage from "use-image";
 import pathImage from "../../assets/blank_01.jpg";
-import { KonvaEventObject } from "konva/lib/Node";
+import { Button } from "../";
 
 type PointType = {
    x: number;
@@ -14,10 +15,10 @@ type HistoryType = {
 };
 export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
    const [image, status] = useImage(pathImage, "anonymous", "origin");
-   const stageRef = useRef(null);
-   const lineRef = useRef(null);
-   const [points, setPoints] = useState<PointType[]>([]);
-   const [history, setHistory] = useState<HistoryType>({
+   const stageRef = React.useRef(null);
+   const lineRef = React.useRef(null);
+   const [points, setPoints] = React.useState<PointType[]>([]);
+   const [history, setHistory] = React.useState<HistoryType>({
       data: [],
       step: 0,
    });
@@ -26,10 +27,22 @@ export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
       const stage = e.target.getStage();
       const stagePos = stage?.getPointerPosition();
       setPoints([...points, { x: stagePos?.x ?? 0, y: stagePos?.y ?? 0 }]);
-      setHistory({
-         data: [...history.data, { x: stagePos?.x ?? 0, y: stagePos?.y ?? 0 }],
-         step: history.step + 1,
-      });
+      if (history.step < history.data.length) {
+         const temp = [...history.data];
+         temp.length = history.step;
+         setHistory({
+            data: [...temp, { x: stagePos?.x ?? 0, y: stagePos?.y ?? 0 }],
+            step: points.length,
+         });
+      } else {
+         setHistory({
+            data: [
+               ...history.data,
+               { x: stagePos?.x ?? 0, y: stagePos?.y ?? 0 },
+            ],
+            step: history.step + 1,
+         });
+      }
    };
    const handleUndo = () => {
       if (history.step > 0) {
@@ -43,18 +56,21 @@ export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
    };
 
    const handleRedo = () => {
-      // const nextState = history[history.length];
-      // if (nextState) {
-      //    setHistory([...history, nextState]);
-      //    setPoints(nextState);
-      // }
+      if (history.step < history.data.length) {
+         const { step, data } = history;
+         setPoints([...points, data[step]]);
+         setHistory({ ...history, step: step + 1 });
+      }
    };
-   console.log("points==>", points);
-   console.log("history==>", history);
+   const reset = () => {
+      setPoints([]);
+      setHistory({ data: [], step: 0 });
+   };
    return (
       <div>
-         <button onClick={handleUndo}>Undo</button>
-         <button onClick={handleRedo}>Redo</button>
+         <Button onClick={handleUndo}>Undo</Button>
+         <Button onClick={handleRedo}>Redo</Button>
+         <Button onClick={reset}>Reset</Button>
          {status === "loading" && (
             <div style={{ textAlign: "center" }}>loading...</div>
          )}
