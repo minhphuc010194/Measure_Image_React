@@ -43,11 +43,11 @@ export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
    };
 
    const handleRedo = () => {
-      const nextState = history[history.length];
-      if (nextState) {
-         setHistory([...history, nextState]);
-         setPoints(nextState);
-      }
+      // const nextState = history[history.length];
+      // if (nextState) {
+      //    setHistory([...history, nextState]);
+      //    setPoints(nextState);
+      // }
    };
    console.log("points==>", points);
    console.log("history==>", history);
