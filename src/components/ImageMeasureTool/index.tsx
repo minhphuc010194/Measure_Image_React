@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Stage, Layer, Line, Text, Image, Circle } from "react-konva";
 import { KonvaEventObject } from "konva/lib/Node";
 import useImage from "use-image";
@@ -14,6 +14,7 @@ type HistoryType = {
    step: number;
 };
 export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
+   const [fileImage, setFileImage] = useState<CanvasImageSource | undefined>();
    const [image, status] = useImage(pathImage, "anonymous", "origin");
    const stageRef = React.useRef(null);
    const lineRef = React.useRef(null);
@@ -27,6 +28,13 @@ export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
       calculate: 1,
    });
    const [color, setColor] = React.useState("#F5236B");
+
+   // init load
+   React.useEffect(() => {
+      if (!fileImage) {
+         setFileImage(image);
+      }
+   }, [image]);
 
    React.useEffect(() => {
       if (points.length === 2) {
@@ -95,6 +103,7 @@ export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
    const reset = () => {
       setPoints([]);
       setHistory({ data: [], step: 0 });
+      setFileImage(undefined);
    };
    return (
       <div>
@@ -107,6 +116,28 @@ export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
                   value={color}
                   onChange={(e) => setColor(e.target.value as string)}
                   type="color"
+               />
+               <input
+                  onChange={(e) => {
+                     const fileInput = e.target;
+                     const file = fileInput.files?.[0];
+
+                     if (file) {
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                           // Create a new Image element
+                           const img = new window.Image() as HTMLImageElement;
+                           img.src = reader.result as string;
+
+                           // Set the image in the state
+                           setFileImage(img);
+                        };
+
+                        reader.readAsDataURL(file);
+                     }
+                  }}
+                  type="file"
+                  accept="image/png, image/jpeg"
                />
             </div>
          </div>
@@ -123,7 +154,7 @@ export const ImageMeasureTool = ({ imageWidthCm = 34 }) => {
          >
             <Layer>
                <Image
-                  image={image}
+                  image={fileImage}
                   width={800}
                   height={800}
                   draggable={false}
