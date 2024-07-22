@@ -9,8 +9,8 @@ dependencies:
     specifier: 9.3.3
     version: 9.3.3
   loader-utils:
-    specifier: 3.2.1
-    version: 3.2.1
+    specifier: 3.3.1
+    version: 3.3.1
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -1247,8 +1247,8 @@ packages:
       type-check: 0.4.0
     dev: true
 
-  /loader-utils@3.2.1:
-    resolution: {integrity: sha512-ZvFw1KWS3GVyYBYb7qkmRM/WwL2TQQBxgCK62rlvm4WpVQ23Nb4tYjApUlfjrEGvOs7KHEsmyUn75OHZrJMWPw==}
+  /loader-utils@3.3.1:
+    resolution: {integrity: sha512-FMJTLMXfCLMLfJxcX9PFqX5qD88Z5MRGaZCVzfuqeZSPsyiBzs+pahDQjbIWz2QIzPZz0NX9Zy4FX3lmK6YHIg==}
     engines: {node: '>= 12.13.0'}
     dev: false
 
