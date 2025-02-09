@@ -48,7 +48,7 @@ devDependencies:
     version: 4.6.0(eslint@8.55.0)
   eslint-plugin-react-refresh:
     specifier: ^0.4.4
-    version: 0.4.5(eslint@8.55.0)
+    version: 0.4.19(eslint@8.55.0)
   typescript:
     specifier: ^5.2.2
     version: 5.3.3
@@ -907,10 +907,10 @@ packages:
       eslint: 8.55.0
     dev: true
 
-  /eslint-plugin-react-refresh@0.4.5(eslint@8.55.0):
-    resolution: {integrity: sha512-D53FYKJa+fDmZMtriODxvhwrO+IOqrxoEo21gMA0sjHdU6dPVH4OhyFip9ypl8HOF5RV5KdTo+rBQLvnY2cO8w==}
+  /eslint-plugin-react-refresh@0.4.19(eslint@8.55.0):
+    resolution: {integrity: sha512-eyy8pcr/YxSYjBoqIFSrlbn9i/xvxUFa8CjzAYo9cFjgGXqq1hyjihcpZvxRLalpaWmueWR81xn7vuKmAFijDQ==}
     peerDependencies:
-      eslint: '>=7'
+      eslint: '>=8.40'
     dependencies:
       eslint: 8.55.0
     dev: true
